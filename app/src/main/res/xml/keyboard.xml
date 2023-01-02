@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyHeight="8%p"
+    android:keyWidth="12.5%p">
+    <Row>
+        <Key android:codes="-5"
+            android:keyLabel="DELETE"
+            android:keyWidth="30%p"
+            android:keyEdgeFlags="left"
+            android:isRepeatable="true"/>
+        <Key android:codes="10"
+            android:keyLabel="QR Code"
+            android:keyWidth="90%p"
+            android:keyEdgeFlags="right"/>
+    </Row>
+</Keyboard>
