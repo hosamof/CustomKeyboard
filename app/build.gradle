@@ -29,6 +29,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding = true
+    }
+
 }
 
 dependencies {
@@ -42,5 +46,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     // Since KeyboardView was deprecated in API level 29. Google recommends to copy the file to your project.
     // this repo should be used in production:
-//    implementation 'io.github.hijamoya:keyboardview:0.0.2'
+    //    implementation 'io.github.hijamoya:keyboardview:0.0.2'
+
+    // qr code
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
 }

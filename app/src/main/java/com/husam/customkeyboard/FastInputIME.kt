@@ -1,5 +1,7 @@
 package com.husam.customkeyboard
 
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.inputmethodservice.InputMethodService
 import android.inputmethodservice.Keyboard
 import android.inputmethodservice.KeyboardView
@@ -7,13 +9,27 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.LiveData
+import com.husam.customkeyboard.MainActivity.Companion.FOR_QR_CODE
+import com.husam.customkeyboard.MainActivity.Companion.textModel
 
 // https://developer.android.com/develop/ui/views/touch-and-input/creating-input-method
 
 class FastInputIME : InputMethodService(), KeyboardView.OnKeyboardActionListener {
     private val MY_TAG = "HusamDebug";
     private var keyboardView: KeyboardView? = null
-    private var caps = false
+
+
+    override fun onCreate() {
+        super.onCreate()
+        val liveData: LiveData<String> = textModel
+        liveData.observeForever { str ->
+            //update main activity view based on state changed
+            if (currentInputConnection != null) {
+                currentInputConnection.commitText(str, 1);
+            }
+        }
+    }
 
     override fun onCreateInputView(): View {
         val latinKeyboardView = Keyboard(this, R.xml.keyboard)
@@ -28,7 +44,7 @@ class FastInputIME : InputMethodService(), KeyboardView.OnKeyboardActionListener
     }
 
     override fun onKey(p0: Int, p1: IntArray?) {
-        Log.e(MY_TAG,"onKey is: $p0")
+        Log.e(MY_TAG, "onKey is: $p0")
         val inputConnection = currentInputConnection
         if (inputConnection != null) {
             when (p0) {
@@ -42,7 +58,10 @@ class FastInputIME : InputMethodService(), KeyboardView.OnKeyboardActionListener
                 }
                 // QR Code
                 10 -> {
-                    inputConnection.commitText("test", 1)
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra(FOR_QR_CODE, true)
+                    intent.flags = FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
                 else -> {
                     inputConnection.commitText("not valid input", 1)
@@ -56,7 +75,6 @@ class FastInputIME : InputMethodService(), KeyboardView.OnKeyboardActionListener
 
     override fun onRelease(p0: Int) {
     }
-
 
 
     override fun onText(p0: CharSequence?) {
